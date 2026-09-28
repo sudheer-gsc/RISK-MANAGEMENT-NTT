@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Machine Risk Intelligence</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                ⚙
+            </div>
+
+            <div>
+                <h1>Machine Risk Intelligence</h1>
+
+                <p>
+                    Dynamic machine monitoring & local ML risk analysis
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="system-status">
+
+            <span class="status-dot"></span>
+
+            <span id="apiStatus">
+                Checking API...
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="dashboard">
+
+        <!-- PAGE INTRO -->
+
+        <section class="page-intro">
+
+            <div>
+
+                <span class="eyebrow">
+                    MACHINE OPERATIONS
+                </span>
+
+                <h2>
+                    Risk Monitoring Dashboard
+                </h2>
+
+                <p>
+                    Configure machine parameters, manage machine records,
+                    and run local Python risk predictions.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= KPI CARDS ================= -->
+
+        <section class="kpi-grid">
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon blue">
+                    ⚙
+                </div>
+
+                <div>
+
+                    <span>
+                        CONFIGURED FIELDS
+                    </span>
+
+                    <strong id="fieldCount">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon purple">
+                    ◉
+                </div>
+
+                <div>
+
+                    <span>
+                        MACHINES
+                    </span>
+
+                    <strong id="machineCount">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon orange">
+                    !
+                </div>
+
+                <div>
+
+                    <span>
+                        HIGH RISK
+                    </span>
+
+                    <strong id="highRiskCount">
+                        —
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon green">
+                    ✓
+                </div>
+
+                <div>
+
+                    <span>
+                        SYSTEM
+                    </span>
+
+                    <strong class="online-text">
+                        ONLINE
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= FIELD CONFIGURATION ================= -->
+
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="section-label">
+                        CONFIGURATION
+                    </span>
+
+                    <h2>
+                        Machine Fields
+                    </h2>
+
+                    <p>
+                        Define the fields used to capture machine information.
+                    </p>
+
+                </div>
+
+                <button
+                    class="btn btn-primary"
+                    onclick="toggleFieldForm()"
+                >
+                    + Add Field
+                </button>
+
+            </div>
+
+
+            <!-- FIELD FORM -->
+
+            <div
+                id="fieldFormContainer"
+                class="form-panel hidden"
+            >
+
+                <form id="fieldForm">
+
+                    <div class="form-grid">
+
+                        <div class="form-control">
+
+                            <label>
+                                Field Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="fieldName"
+                                placeholder="e.g. Temperature"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-control">
+
+                            <label>
+                                Field Type
+                            </label>
+
+                            <select
+                                id="fieldType"
+                                required
+                            >
+
+                                <option value="text">
+                                    Text
+                                </option>
+
+                                <option value="number">
+                                    Number
+                                </option>
+
+                                <option value="dropdown">
+                                    Dropdown
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-control checkbox-control">
+
+                            <label>
+
+                                <input
+                                    type="checkbox"
+                                    id="fieldRequired"
+                                >
+
+                                Required field
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="dropdownOptionsGroup"
+                        class="form-control hidden"
+                    >
+
+                        <label>
+                            Dropdown Options
+                        </label>
+
+                        <input
+                            type="text"
+                            id="dropdownOptions"
+                            placeholder="Low, Medium, High"
+                        >
+
+                        <small>
+                            Separate options using commas.
+                        </small>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            onclick="toggleFieldForm()"
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Save Field
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- FIELD TABLE -->
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                FIELD
+                            </th>
+
+                            <th>
+                                TYPE
+                            </th>
+
+                            <th>
+                                REQUIRED
+                            </th>
+
+                            <th>
+                                OPTIONS
+                            </th>
+
+                            <th>
+                                ACTION
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="fieldsTableBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= MACHINE MANAGEMENT ================= -->
+
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="section-label">
+                        MACHINE DATA
+                    </span>
+
+                    <h2>
+                        Machine Management
+                    </h2>
+
+                    <p>
+                        Create and manage machines using dynamic fields.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- MACHINE FORM -->
+
+            <div class="machine-form-wrapper">
+
+                <form id="machineForm">
+
+                    <div
+                        id="machineFields"
+                        class="machine-fields"
+                    >
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+                                ⚙
+                            </div>
+
+                            <h3>
+                                No machine fields configured
+                            </h3>
+
+                            <p>
+                                Add fields above to start creating machines.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Save Machine
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- MACHINE TABLE -->
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                MACHINE
+                            </th>
+
+                            <th>
+                                PARAMETERS
+                            </th>
+
+                            <th>
+                                ACTION
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="machinesTableBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= RISK PREDICTION ================= -->
+
+        <section class="panel prediction-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="section-label">
+                        LOCAL ML ENGINE
+                    </span>
+
+                    <h2>
+                        Risk Prediction
+                    </h2>
+
+                    <p>
+                        Run the local Random Forest model against a machine.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="prediction-controls">
+
+                <div class="form-control">
+
+                    <label>
+                        Select Machine
+                    </label>
+
+                    <select id="predictionMachine">
+
+                        <option value="">
+                            Select a machine
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    id="predictButton"
+                    class="btn btn-danger"
+                    type="button"
+                >
+                    Run Risk Prediction
+                </button>
+
+            </div>
+
+
+            <!-- PREDICTION RESULT -->
+
+            <div
+                id="predictionResult"
+                class="prediction-result hidden"
+            >
+
+                <div class="risk-header">
+
+                    <div>
+
+                        <span class="section-label">
+                            PREDICTION RESULT
+                        </span>
+
+                        <h3>
+                            Machine Risk Assessment
+                        </h3>
+
+                    </div>
+
+                    <div
+                        id="riskLevel"
+                        class="risk-badge"
+                    >
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="predictionDetails"
+                    class="prediction-details"
+                >
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= TOAST ================= -->
+
+    <div
+        id="toast"
+        class="toast"
+    >
+    </div>
+
+
+    <script src="/static/app.js"></script>
+
+</body>
+</html>
